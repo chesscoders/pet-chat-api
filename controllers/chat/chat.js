@@ -1,34 +1,30 @@
 const OpenAI = require("openai");
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
-const axios = require("axios");
-
-let chatHistory = [];
 
 module.exports = async (req, res) => {
+  const messages = req.body.messages.map((message) => message.content); // Extract content from each message
+  const prompt = `${messages.join("\n")}\nAnswer in Romanian:`; // Concatenate messages and add instruction
+
   try {
-    const prompt = ``;
+    const stream = await openai.chat.completions.create({
+      messages: [{ role: "system", content: prompt }], // Use concatenated prompt including message history
+      model: "gpt-3.5-turbo",
+      temperature: 0.8,
+      stream: true,
+    });
 
-    const response = await axios.post(
-      "https://api.openai.com/v1/engines/text-davinci-003/completions",
-      {
-        prompt: prompt,
-        max_tokens: 100,
-        temperature: 0.7,
-        top_p: 1,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        timeout: 10000,
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || "";
+      if (content) {
+        res.write(`${content}`);
       }
-    );
+    }
 
-    console.log(response);
-
-    const message = response.data.choices[0].text.trim();
-    return res.status(200).json({ message });
+    res.end();
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
