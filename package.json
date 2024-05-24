@@ -1,0 +1,27 @@
+{
+  "name": "pet-chat-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/openai": "^0.0.33",
+    "ai": "^3.1.12",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "express-fileupload": "^1.5.0",
+    "express-goodies": "^1.1.1",
+    "helmet": "^7.1.0",
+    "langchain": "^0.2.1",
+    "nodemon": "^3.1.0",
+    "pino": "^9.1.0"
+  }
+}
