@@ -66,8 +66,9 @@ const values = [
 ];
 const regexToRemove =
   /Animăluțele noastre merită toată dragostea pe care le-o putem oferi[\s\S]*$/;
-function modifyDescription(description) {
-  return description.replace(regexToRemove, "").trim();
+function modifyDescription(description, name) {
+  //return description.replace(regexToRemove, "").trim();
+  return "Titlu produs: " + name + "\n" + description;
 }
 async function cleanupDescriptions() {
   for (let category of values) {
@@ -84,7 +85,10 @@ async function cleanupDescriptions() {
           }
           // Modify the description field
           if (jsonData.description) {
-            jsonData.description = modifyDescription(jsonData.description);
+            jsonData.description = modifyDescription(
+              jsonData.description,
+              jsonData.name
+            );
           }
           fs.writeFile(
             filePath,
