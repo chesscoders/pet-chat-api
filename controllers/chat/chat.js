@@ -88,7 +88,6 @@ module.exports = async (req, res) => {
 
   // Include the system message in the chat history
   const chatHistory = [systemMessage, ...messages];
-  console.log(chatHistory);
 
   try {
     const stream = await openai.chat.completions.create({
