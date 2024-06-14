@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const stream = await openai.chat.completions.create({
       messages: chatHistory, // Send the complete conversation history
       model: "gpt-4o",
-      temperature: 0.2,
+      temperature: 0,
       stream: true,
     });
 
